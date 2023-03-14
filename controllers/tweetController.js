@@ -7,7 +7,8 @@ async function show(req, res) {
 }
 
 async function create(req, res) {
-  const user = await User.findOne({ _id: req.user });
+  const loggedUser = "641091e2fd5a538f7ac71360";
+  const user = await User.findById(loggedUser);
   const tweet = new Tweet({
     userId: user,
     content: req.body.tweet,
@@ -16,16 +17,16 @@ async function create(req, res) {
   const result = await user.save();
   await Tweet.create(tweet);
 
-  return res.json("/home");
+  return res.json("twt creado");
 }
 
 async function destroy(req, res) {
   await Tweet.findByIdAndDelete(req.params.id);
-  return res.json(`/user/${req.user.id}`);
+  return res.json("twt eliminado");
 }
 
 async function tweetLikes(req, res) {
-  const userId = req.user._id;
+  const userId = "641091e2fd5a538f7ac71360";
   const tweet = await Tweet.findById(req.params.id);
 
   if (tweet.likes.find((id) => id.toString() === userId.toString())) {
@@ -34,7 +35,7 @@ async function tweetLikes(req, res) {
     await tweet.updateOne({ $addToSet: { likes: userId } });
   }
 
-  return res.json(req.get(`referer`));
+  return res.json("twt likeado");
 }
 
 module.exports = {

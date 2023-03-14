@@ -33,7 +33,7 @@ module.exports = (app) => {
 
   // app.use("/usuarios", userRoutes);
   // app.use(makeUserAvailableInViews);
-  app.use("/user", userRoutes);
+  app.use("/users", userRoutes);
   app.use("/auth", authRoutes);
-  app.use("/tweet", tweetRoutes);
+  app.use("/tweets", tweetRoutes);
 };

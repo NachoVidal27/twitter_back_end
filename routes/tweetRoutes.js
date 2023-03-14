@@ -7,6 +7,6 @@ router.get("/", tweetController.show);
 router.post("/", tweetController.create);
 // router.get("/:id", tweetController.showTweetById);
 router.delete("/:id", tweetController.destroy);
-router.patch("/:id", tweetController.tweetLikes);
+router.post("/:id", tweetController.tweetLikes);
 
 module.exports = router;

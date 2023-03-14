@@ -9,6 +9,7 @@ async function showCreate(req, res) {
 
 async function store(req, res) {
   newUser = req.body;
+  console.log(newUser);
   const passwordHasheado = await bcrypt.hash(newUser.password, 10);
   const created = await User.create({
     firstname: newUser.firstname,
@@ -19,7 +20,7 @@ async function store(req, res) {
     password: passwordHasheado,
   });
 
-  return res.json("/");
+  return res.json(created);
 }
 
 async function userTweets(req, res) {
@@ -27,7 +28,7 @@ async function userTweets(req, res) {
   const user = await User.findOne({ _id: req.params.id }).populate("tweets", null, null, {
     sort: { createdAt: "desc" },
   });
-  return res.json("pages/profile", { user, logedUser });
+  return res.json(user);
 }
 
 async function userFollow(req, res) {

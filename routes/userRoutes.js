@@ -5,7 +5,7 @@ const userController = require("../controllers/userController");
 
 router.post("/", userController.store);
 router.get("/:id", userController.userTweets);
-router.patch("/follow", userController.userFollow);
+router.post("/follow", userController.userFollow);
 // router.put("/:id", userController.controlerParaEditarUser);
 // router.post("/:id/:tweetId/like", userController.tweetLikes);
 // router.get("/:id/followers", userController.showFollowers);
