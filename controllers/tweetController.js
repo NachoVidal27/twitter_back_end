@@ -9,10 +9,6 @@ async function show(req, res) {
 
 async function create(req, res) {
   checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] });
-  console.log(
-    "-----------------------------------------------------------------------------------------------------",
-  );
-  console.log(req);
   const user = await User.findById(req.auth.id);
   console.log(user);
   const tweet = new Tweet({
@@ -22,7 +18,6 @@ async function create(req, res) {
   user.tweets.push(tweet);
   const result = await user.save();
   await Tweet.create(tweet);
-
   return res.json("twt creado");
 }
 
