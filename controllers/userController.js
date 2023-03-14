@@ -2,6 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 async function index(req, res) {}
 const Tweet = require("../models/Tweet");
+const jwt = require("jsonwebtoken");
 
 async function showCreate(req, res) {
   return res.json("pages/register");
@@ -31,6 +32,18 @@ async function userTweets(req, res) {
   return res.json(user);
 }
 
+async function getToken(req, res) {
+  const user = await User.findOne({ email: req.body.email });
+  const checkHash = true;
+  if (user && checkHash) {
+    return res.json({
+      token: jwt.sign({ id: user._id }, process.env.SESSION_SECRET),
+    });
+  } else {
+    return res.json("No existe este usuario");
+  }
+}
+
 async function userFollow(req, res) {
   const userId = req.user._id;
   const user = await User.findById(req.params.id);
@@ -52,4 +65,5 @@ module.exports = {
   showCreate,
   userTweets,
   userFollow,
+  getToken,
 };

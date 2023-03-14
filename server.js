@@ -1,17 +1,19 @@
 require("dotenv").config();
 const path = require("path");
 const express = require("express");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const { expressjwt: checkJwt } = require("express-jwt");
 
-const sessions = require("./sessions");
 const routes = require("./routes");
 
-const APP_PORT = process.env.APP_PORT || 3000;
+const APP_PORT = process.env.APP_PORT || 8000;
 const app = express();
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 app.use(express.json());
-app.set("view engine", "ejs");
 
 routes(app);
 

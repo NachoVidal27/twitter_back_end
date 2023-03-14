@@ -6,15 +6,7 @@ const userController = require("../controllers/userController");
 router.post("/", userController.store);
 router.get("/:id", userController.userTweets);
 router.post("/follow", userController.userFollow);
-// router.put("/:id", userController.controlerParaEditarUser);
-// router.post("/:id/:tweetId/like", userController.tweetLikes);
-// router.get("/:id/followers", userController.showFollowers);
-// router.get("/:id/following", userController.showFollowing);
-// router.use(isAuthenticated);
-// router.get("/", userController.index);
 router.get("/register", userController.showCreate);
-// router.get("/editar/:id", userController.edit);
-// router.patch("/:id", userController.update);
-// router.delete("/:id", userController.destroy);
+router.post("/token", userController.getToken);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Tweet = require("../models/Tweet");
+const { expressjwt: checkJwt } = require("express-jwt");
 
 async function show(req, res) {
   const tweets = await Tweet.find();
@@ -7,10 +8,15 @@ async function show(req, res) {
 }
 
 async function create(req, res) {
-  const loggedUser = "641091e2fd5a538f7ac71360";
-  const user = await User.findById(loggedUser);
+  checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] });
+  console.log(
+    "-----------------------------------------------------------------------------------------------------",
+  );
+  console.log(req);
+  const user = await User.findById(req.auth.id);
+  console.log(user);
   const tweet = new Tweet({
-    userId: user,
+    userId: req.auth.id,
     content: req.body.tweet,
   });
   user.tweets.push(tweet);
@@ -21,12 +27,14 @@ async function create(req, res) {
 }
 
 async function destroy(req, res) {
+  checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] });
   await Tweet.findByIdAndDelete(req.params.id);
   return res.json("twt eliminado");
 }
 
 async function tweetLikes(req, res) {
-  const userId = "641091e2fd5a538f7ac71360";
+  checkJwt({ secret: process.env.SESSION_SECRET, algorithms: ["HS256"] });
+  const userId = req.auth.id;
   const tweet = await Tweet.findById(req.params.id);
 
   if (tweet.likes.find((id) => id.toString() === userId.toString())) {
