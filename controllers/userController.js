@@ -4,10 +4,6 @@ async function index(req, res) {}
 const Tweet = require("../models/Tweet");
 const jwt = require("jsonwebtoken");
 
-async function showCreate(req, res) {
-  return res.json("pages/register");
-}
-
 async function store(req, res) {
   newUser = req.body;
   console.log(newUser);
@@ -62,7 +58,6 @@ async function userFollow(req, res) {
 module.exports = {
   index,
   store,
-  showCreate,
   userTweets,
   userFollow,
   getToken,

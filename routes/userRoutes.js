@@ -4,9 +4,8 @@ const userController = require("../controllers/userController");
 // const isAuthenticated = require("../middlewares/ensureAuthenticated");
 
 router.post("/", userController.store);
+router.post("/token", userController.getToken);
 router.get("/:id", userController.userTweets);
 router.post("/follow", userController.userFollow);
-router.get("/register", userController.showCreate);
-router.post("/token", userController.getToken);
 
 module.exports = router;
