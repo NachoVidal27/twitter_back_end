@@ -30,14 +30,17 @@ async function userTweets(req, res) {
 
 async function getToken(req, res) {
   const user = await User.findOne({ email: req.body.email });
-  const checkHash = true;
-  if (user && checkHash) {
-    return res.json({
-      token: jwt.sign({ id: user._id }, process.env.SESSION_SECRET),
-    });
-  } else {
-    return res.json("No existe este usuario");
-  }
+  const checkHash = bcrypt.compare(req.body.password, user.password, function (err, res) {
+    if (user && checkHash) {
+      if (res) {
+        return res.json({
+          token: jwt.sign({ id: user._id }, process.env.SESSION_SECRET),
+        });
+      } else {
+        return res.json("No existe este usuario");
+      }
+    }
+  });
 }
 
 async function userFollow(req, res) {
