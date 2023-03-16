@@ -30,24 +30,23 @@ async function userTweets(req, res) {
 
 async function getToken(req, res) {
   const user = await User.findOne({ email: req.body.email });
-  const checkHash = bcrypt.compare(req.body.password, user.password, function (err, res) {
-    if (user && checkHash) {
-      if (res) {
-        return res.json({
-          token: jwt.sign({ id: user._id }, process.env.SESSION_SECRET),
-        });
-      } else {
-        return res.json("No existe este usuario");
-      }
-    }
+  const checkHash = await bcrypt.compare(req.body.password, user.password);
+  if (!user) {
+    return res.json("Error en las credenciaes ingresadas");
+  }
+  if (!checkHash) {
+    return res.json("Error en las credenciaes ingresadas");
+  }
+  return res.json({
+    token: jwt.sign({ id: user.id }, process.env.SESSION_SECRET),
   });
 }
 
 async function userFollow(req, res) {
-  const userId = req.user._id;
+  const userId = req.auth.id;
   const user = await User.findById(req.params.id);
 
-  if (user.followers.find((id) => id.toString() === userId.toString())) {
+  if (user.followers.includes(userId)) {
     await user.updateOne({ $pull: { followers: userId } });
     await req.user.updateOne({ $pull: { following: user._id } });
   } else {

@@ -2,7 +2,7 @@ const User = require("../models/User");
 const Tweet = require("../models/Tweet");
 const { expressjwt: checkJwt } = require("express-jwt");
 
-async function show(req, res) {
+async function index(req, res) {
   const tweets = await Tweet.find();
   return res.json(tweets);
 }
@@ -42,7 +42,7 @@ async function tweetLikes(req, res) {
 }
 
 module.exports = {
-  show,
+  index,
   create,
   destroy,
   tweetLikes,

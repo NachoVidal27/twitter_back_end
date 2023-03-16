@@ -3,7 +3,7 @@ const { mongoose, Schema } = require("../db");
 const tweetSchema = new Schema(
   {
     content: String,
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
@@ -11,7 +11,8 @@ const tweetSchema = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        min:5, max:70
+        min: 5,
+        max: 70,
       },
     ],
   },
