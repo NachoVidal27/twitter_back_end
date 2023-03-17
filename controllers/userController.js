@@ -21,8 +21,8 @@ async function store(req, res) {
 }
 
 async function userTweets(req, res) {
-  const logedUser = req.user;
-  const user = await User.findOne({ _id: req.params.id }).populate("tweets", null, null, {
+  const logedUser = await User.findById(req.auth.id);
+  const user = await Tweet.find({ user: logedUser }).populate("tweets", null, null, {
     sort: { createdAt: "desc" },
   });
   return res.json(user);
@@ -39,6 +39,7 @@ async function getToken(req, res) {
   }
   return res.json({
     token: jwt.sign({ id: user.id }, process.env.SESSION_SECRET),
+    id: user.id,
   });
 }
 
