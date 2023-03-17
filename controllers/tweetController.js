@@ -3,7 +3,11 @@ const Tweet = require("../models/Tweet");
 const { expressjwt: checkJwt } = require("express-jwt");
 
 async function index(req, res) {
-  const tweets = await Tweet.find();
+  const user = await User.findById(req.auth.id);
+  const tweets = await Tweet.find({ userId: { $in: user.following } })
+    .populate("user")
+    .sort({ createdAt: "desc" })
+    .limit(20);
   return res.json(tweets);
 }
 
