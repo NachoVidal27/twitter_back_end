@@ -30,15 +30,16 @@ async function userTweets(req, res) {
 
 async function getToken(req, res) {
   const user = await User.findOne({ email: req.body.email });
-  const checkHash = await bcrypt.compare(req.body.password, user.password);
   if (!user) {
-    return res.json("Error en las credenciaes ingresadas");
+    return res.send("Error en las credenciaes ingresadas",401);
   }
+  const checkHash = await bcrypt.compare(req.body.password, user.password);
   if (!checkHash) {
-    return res.json("Error en las credenciaes ingresadas");
+    return res.send("Error en las credenciaes ingresadas",401);
   }
   return res.json({
     token: jwt.sign({ id: user.id }, process.env.SESSION_SECRET),
+    id: user.id
   });
 }
 
