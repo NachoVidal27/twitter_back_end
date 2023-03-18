@@ -20,8 +20,13 @@ async function store(req, res) {
   return res.json(created);
 }
 
+async function show(req, res) {
+  const user = await User.findById(req.params.id).populate("tweets");
+  return res.json(user);
+}
+
 async function userTweets(req, res) {
-  const logedUser = await User.findById(req.auth.id);
+  const logedUser = await User.findById(req.params.id);
   const user = await Tweet.find({ user: logedUser }).populate("tweets", null, null, {
     sort: { createdAt: "desc" },
   });
@@ -31,15 +36,15 @@ async function userTweets(req, res) {
 async function getToken(req, res) {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return res.send("Error en las credenciaes ingresadas",401);
+    return res.send("Error en las credenciaes ingresadas", 401);
   }
   const checkHash = await bcrypt.compare(req.body.password, user.password);
   if (!checkHash) {
-    return res.send("Error en las credenciaes ingresadas",401);
+    return res.send("Error en las credenciaes ingresadas", 401);
   }
   return res.json({
     token: jwt.sign({ id: user.id }, process.env.SESSION_SECRET),
-    id: user.id
+    id: user.id,
   });
 }
 
@@ -64,4 +69,5 @@ module.exports = {
   userTweets,
   userFollow,
   getToken,
+  show,
 };

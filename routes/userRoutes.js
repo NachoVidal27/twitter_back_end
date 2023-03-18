@@ -5,7 +5,7 @@ const userController = require("../controllers/userController");
 
 router.post("/", userController.store);
 router.post("/tokens", userController.getToken);
-router.get("/:id", userController.userTweets);
+router.get("/:id", userController.show);
 router.post("/follow", userController.userFollow);
 
 module.exports = router;
