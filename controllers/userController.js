@@ -21,9 +21,19 @@ async function store(req, res) {
 }
 
 async function show(req, res) {
+  console.log(req.auth);
   const user = await User.findById(req.params.id).populate("tweets");
   return res.json(user);
 }
+// async function show(req, res) {
+//   const user = await User.findById(req.auth.id);
+//   console.log(user);
+//   const tweets = await Tweet.find({ userId: user.id }).populate("tweets");
+//   //   .sort({ createdAt: "desc" })
+//   //   .limit(20);
+//   console.log(tweets);
+//   return res.json(user);
+// }
 
 async function userTweets(req, res) {
   const logedUser = await User.findById(req.params.id);
