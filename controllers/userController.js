@@ -3,20 +3,29 @@ const bcrypt = require("bcryptjs");
 async function index(req, res) {}
 const Tweet = require("../models/Tweet");
 const jwt = require("jsonwebtoken");
+const formidable = require("formidable");
 
 async function store(req, res) {
   newUser = req.body;
-  console.log(newUser);
-  const passwordHasheado = await bcrypt.hash(newUser.password, 10);
-  const created = await User.create({
-    firstname: newUser.firstname,
-    lastname: newUser.lastname,
-    email: newUser.email,
-    username: newUser.username,
-    image: newUser.image,
-    password: passwordHasheado,
+  const form = formidable({
+    multiples: false,
+    uploadDir: __dirname + "/../public/img",
+    keepExtensions: true,
+  });
+  form.parse(req, async (err, fields, files) => {
+    const { firstname, lastname, email, username, password } = fields;
   });
 
+  const passwordHasheado = await bcrypt.hash(newUser.password, 10);
+  const created = await User.create({
+    firstname: firstname,
+    lastname: lastname,
+    email: email,
+    username: username,
+    image: files.image.newFilename,
+    password: passwordHasheado,
+  });
+  await created.save();
   return res.json(created);
 }
 
